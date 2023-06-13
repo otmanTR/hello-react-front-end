@@ -25,15 +25,15 @@ const LINE_BREAK = astUtils.createGlobalLinebreakMatcher();
 // Rule Definition
 //------------------------------------------------------------------------------
 
-/** @type {import('../shared/types').Rule} */
 module.exports = {
     meta: {
         type: "problem",
 
         docs: {
-            description: "Disallow irregular whitespace",
+            description: "disallow irregular whitespace",
+            category: "Possible Errors",
             recommended: true,
-            url: "https://eslint.org/docs/latest/rules/no-irregular-whitespace"
+            url: "https://eslint.org/docs/rules/no-irregular-whitespace"
         },
 
         schema: [
@@ -78,7 +78,7 @@ module.exports = {
         const skipRegExps = !!options.skipRegExps;
         const skipTemplates = !!options.skipTemplates;
 
-        const sourceCode = context.sourceCode;
+        const sourceCode = context.getSourceCode();
         const commentNodes = sourceCode.getAllComments();
 
         /**
@@ -100,12 +100,12 @@ module.exports = {
         }
 
         /**
-         * Checks literal nodes for errors that we are choosing to ignore and calls the relevant methods to remove the errors
+         * Checks identifier or literal nodes for errors that we are choosing to ignore and calls the relevant methods to remove the errors
          * @param {ASTNode} node to check for matching errors.
          * @returns {void}
          * @private
          */
-        function removeInvalidNodeErrorsInLiteral(node) {
+        function removeInvalidNodeErrorsInIdentifierOrLiteral(node) {
             const shouldCheckStrings = skipStrings && (typeof node.value === "string");
             const shouldCheckRegExps = skipRegExps && Boolean(node.regex);
 
@@ -237,7 +237,8 @@ module.exports = {
                 checkForIrregularLineTerminators(node);
             };
 
-            nodes.Literal = removeInvalidNodeErrorsInLiteral;
+            nodes.Identifier = removeInvalidNodeErrorsInIdentifierOrLiteral;
+            nodes.Literal = removeInvalidNodeErrorsInIdentifierOrLiteral;
             nodes.TemplateElement = skipTemplates ? removeInvalidNodeErrorsInTemplateLiteral : noop;
             nodes["Program:exit"] = function() {
                 if (skipComments) {

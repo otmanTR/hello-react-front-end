@@ -53,15 +53,15 @@ function getDifference(arrA, arrB) {
 // Rule Definition
 //------------------------------------------------------------------------------
 
-/** @type {import('../shared/types').Rule} */
 module.exports = {
     meta: {
         type: "problem",
 
         docs: {
-            description: "Disallow loops with a body that allows only one iteration",
+            description: "disallow loops with a body that allows only one iteration",
+            category: "Possible Errors",
             recommended: false,
-            url: "https://eslint.org/docs/latest/rules/no-unreachable-loop"
+            url: "https://eslint.org/docs/rules/no-unreachable-loop"
         },
 
         schema: [{

@@ -39,7 +39,7 @@ function isEqualityOperator(operator) {
  * @returns {boolean} Whether the operator is used in range tests.
  */
 function isRangeTestOperator(operator) {
-    return ["<", "<="].includes(operator);
+    return ["<", "<="].indexOf(operator) >= 0;
 }
 
 /**
@@ -115,15 +115,15 @@ function getNormalizedLiteral(node) {
 // Rule Definition
 //------------------------------------------------------------------------------
 
-/** @type {import('../shared/types').Rule} */
 module.exports = {
     meta: {
         type: "suggestion",
 
         docs: {
-            description: 'Require or disallow "Yoda" conditions',
+            description: 'require or disallow "Yoda" conditions',
+            category: "Best Practices",
             recommended: false,
-            url: "https://eslint.org/docs/latest/rules/yoda"
+            url: "https://eslint.org/docs/rules/yoda"
         },
 
         schema: [
@@ -162,7 +162,7 @@ module.exports = {
         const onlyEquality =
             context.options[1] && context.options[1].onlyEquality;
 
-        const sourceCode = context.sourceCode;
+        const sourceCode = context.getSourceCode();
 
         /**
          * Determines whether node represents a range test.
@@ -343,7 +343,7 @@ module.exports = {
                     ) &&
                     !(!isEqualityOperator(node.operator) && onlyEquality) &&
                     isComparisonOperator(node.operator) &&
-                    !(exceptRange && isRangeTest(node.parent))
+                    !(exceptRange && isRangeTest(context.getAncestors().pop()))
                 ) {
                     context.report({
                         node,

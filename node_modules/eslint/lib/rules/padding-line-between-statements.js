@@ -253,7 +253,7 @@ function verifyForNever(context, _, nextNode, paddingLines) {
             const nextToken = paddingLines[0][1];
             const start = prevToken.range[1];
             const end = nextToken.range[0];
-            const text = context.sourceCode.text
+            const text = context.getSourceCode().text
                 .slice(start, end)
                 .replace(PADDING_LINE_SEQUENCE, replacerToRemovePaddingLines);
 
@@ -284,7 +284,7 @@ function verifyForAlways(context, prevNode, nextNode, paddingLines) {
         node: nextNode,
         messageId: "expectedBlankLine",
         fix(fixer) {
-            const sourceCode = context.sourceCode;
+            const sourceCode = context.getSourceCode();
             let prevToken = getActualLastToken(sourceCode, prevNode);
             const nextToken = sourceCode.getFirstTokenBetween(
                 prevToken,
@@ -425,15 +425,15 @@ const StatementTypes = {
 // Rule Definition
 //------------------------------------------------------------------------------
 
-/** @type {import('../shared/types').Rule} */
 module.exports = {
     meta: {
         type: "layout",
 
         docs: {
-            description: "Require or disallow padding lines between statements",
+            description: "require or disallow padding lines between statements",
+            category: "Stylistic Issues",
             recommended: false,
-            url: "https://eslint.org/docs/latest/rules/padding-line-between-statements"
+            url: "https://eslint.org/docs/rules/padding-line-between-statements"
         },
 
         fixable: "whitespace",
@@ -450,7 +450,8 @@ module.exports = {
                             type: "array",
                             items: { enum: Object.keys(StatementTypes) },
                             minItems: 1,
-                            uniqueItems: true
+                            uniqueItems: true,
+                            additionalItems: false
                         }
                     ]
                 }
@@ -465,7 +466,8 @@ module.exports = {
                 },
                 additionalProperties: false,
                 required: ["blankLine", "prev", "next"]
-            }
+            },
+            additionalItems: false
         },
 
         messages: {
@@ -475,7 +477,7 @@ module.exports = {
     },
 
     create(context) {
-        const sourceCode = context.sourceCode;
+        const sourceCode = context.getSourceCode();
         const configureList = context.options || [];
         let scopeInfo = null;
 
@@ -617,11 +619,9 @@ module.exports = {
             Program: enterScope,
             BlockStatement: enterScope,
             SwitchStatement: enterScope,
-            StaticBlock: enterScope,
             "Program:exit": exitScope,
             "BlockStatement:exit": exitScope,
             "SwitchStatement:exit": exitScope,
-            "StaticBlock:exit": exitScope,
 
             ":statement": verify,
 

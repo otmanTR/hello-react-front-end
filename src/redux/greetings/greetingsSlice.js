@@ -6,9 +6,9 @@ const initialState = {
     error: null
   };
   
-  export const getRandomGreeting = createAsyncThunk('getRandomGreeting', async () => {
+   export const getRandomGreeting = createAsyncThunk('getRandomGreeting', async () => {
     try {
-        const response = await axios.get('/api/v1/greetings')
+        const response = await axios.get('http://localhost:3000/api/v1/greetings')
         const data = response.data
         return data
     } catch (error) {
@@ -16,7 +16,7 @@ const initialState = {
     }
 })
 
-export const greetingsSlice = createSlice({
+ const greetingsSlice = createSlice({
     name: 'greetings',
     initialState,
     reducers: {
@@ -29,3 +29,6 @@ export const greetingsSlice = createSlice({
     },
   
   });
+
+  export const { Greeting } = greetinSlice.actions;
+  export default greetingsSlice.reducer;

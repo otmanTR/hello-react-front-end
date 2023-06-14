@@ -83,7 +83,7 @@ npm run start
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- [ ] **[Connect API]**
+- [ ] **[Add Styling]**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

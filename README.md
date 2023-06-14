@@ -43,7 +43,6 @@
 To get a local copy up and running, follow these steps.
 
 
-I
 ### Prerequisites
 
 - Make sure you have Ruby installed in your system. You can install it [here](https://www.ruby-lang.org/en/documentation/installation/)
